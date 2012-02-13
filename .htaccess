@@ -15,17 +15,30 @@
 	RewriteEngine on
 	Options +FollowSymlinks
 
-### Replace slashes and commas with underscores
-	RewriteCond %{QUERY_STRING} 	^(.*)[\/|,](.*)$
-	RewriteRule ^(.*)$				$1?%1_%2			[N]
-### Redirect requests to the cache
-	RewriteCond %{QUERY_STRING}		^v=(.*)&f=(.*)$
-	RewriteRule ^(.*)$				cache/v%1_%2?		[NC,L]
-### If the cache file doesn't exist, process
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^(.*)$				index.php			[NC,L]
+## Redirect requests to the cache
+	### Replace slashes and commas with underscores
+		RewriteCond %{QUERY_STRING} 	^(.*)[\/|,](.*)$
+		RewriteRule ^(.*)$				$1?%1_%2			[N]
+	### Redirect requests to the cache
+		RewriteCond %{QUERY_STRING}		^v=(.*)&f=(.*)$
+		RewriteRule ^(.*)$				cache/v%1_%2?		[NC,L]
+	### If the cache file doesn't exist, process
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteRule ^(.*)$				index.php			[NC,L]
 
-### Cache everything for a year
-	<ifModule mod_headers.c>
-		Header set Cache-Control "max-age=29030400, public"
-	</ifModule>
+### Optimization
+	### Cache everything for a year
+		<ifModule mod_headers.c>
+			Header set Cache-Control "max-age=29030400, public"
+		</ifModule>
+
+	## GZIP (+)
+		<IfModule mod_deflate.c>
+			SetOutputFilter DEFLATE
+		</IfModule>
+
+	## Remove ETags
+		<ifModule mod_headers.c>
+			Header unset ETag
+		</ifModule>
+		FileETag None
