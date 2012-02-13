@@ -26,9 +26,9 @@
 		// Remove everything before the ?
 		$tmp = substr($tmp, (strpos($tmp, '?') + 1));
 		// Parse into parameters
-		$tmp = parse_str($tmp);
+		parse_str($tmp, $params);
 		// Split up the files into an array
-		$files = explode(',', $f);
+		$files = explode(',', $params['f']);
 
 	/*
 	 * Load the files and process them
@@ -44,7 +44,7 @@
 			// An identifier
 			$content .= "/* {$file} */\n\n";
 			// Load up the file
-			$string = @file_get_contents($_SERVER['DOCUMENT_ROOT'] . $file);
+			$string = @file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/' . $file);
 			if($string){
 				// Only process files that haven't been min'ed already
 				if(strpos($file, '.min') === FALSE){
