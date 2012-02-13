@@ -27,13 +27,30 @@
 		$tmp = substr($tmp, (strpos($tmp, '?') + 1));
 		// Parse into parameters
 		parse_str($tmp, $params);
+		// Do we have both a version and a list of files?
+		if(!array_key_exists('v', $params) || !array_key_exists('f', $params)){
+			// Be upset
+			header ("Content-type: text/plain");
+			echo <<<HEREDOC
+/**
+ * Minify Multitool - @oodavid 2012
+ *
+ *	Nothing to do, are you missing a parameter?
+ *
+ *	Example URLS
+ *		/minify?v=12&f=css/base.css,bootstrap.less,index.css
+ *		/minify?v=123&f=js/base.js,index.js
+ */
+HEREDOC;
+			exit();
+		}
 		// Split up the files into an array
 		$files = explode(',', $params['f']);
 
 	/*
 	 * Load the files and process them
 	 */
-		// All the contents go here
+		// The content is written here
 		$content = "/* === Minify Multitool - @oodavid 2012 === */\n\n";
 
 		// We assume it's plaintext unless something gets processed
