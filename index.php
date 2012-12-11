@@ -28,7 +28,7 @@
 		// Parse into parameters
 		parse_str($tmp, $params);
 		// Do we have both a version and a list of files?
-		if(!array_key_exists('v', $params) || !array_key_exists('f', $params)){
+		if(!isset($params['v']) || !isset($params['f'])){
 			// Be upset
 			header ("Content-type: text/plain");
 			echo <<<HEREDOC
